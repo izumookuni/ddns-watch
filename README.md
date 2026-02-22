@@ -37,11 +37,15 @@
 | `RECEIVE_MAIL` | 接收通知的邮箱 | `receiver@example.com` |
 | `SECRET_KEY` | 加密密钥（自定义字符串） | `my-secret-key-123` |
 
-### 3. 启用 GitHub Actions
+### 3. 移除仓库存在的current_ip文件
+
+删除 `current_ip` 文件，否则程序将无法判断 IP 是否变化。
+
+### 4. 启用 GitHub Actions
 
 进入 **Actions** 标签页，如果提示需要启用，点击 **I understand my workflows, go ahead and enable them**。
 
-### 4. 手动测试（可选）
+### 5. 手动测试（可选）
 
 在 **Actions** 标签页，选择 **DDNS IP Monitor** 工作流，点击 **Run workflow** 可以手动触发一次测试。
 
