@@ -1,0 +1,46 @@
+name: DDNS IP Monitor
+
+on:
+  schedule:
+    # 每8小时执行一次 (UTC时间: 0:00, 8:00, 16:00)
+    - cron: '0 */8 * * *'
+  workflow_dispatch: # 支持手动触发
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Run DDNS monitor
+        env:
+          HOST_NAME: ${{ secrets.HOST_NAME }}
+          SMTP_URL: ${{ secrets.SMTP_URL }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          RECEIVE_MAIL: ${{ secrets.RECEIVE_MAIL }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        run: python main.py
+      
+      - name: Commit and push IP file
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          if [ -f current_ip ]; then
+            git add current_ip
+            git diff --quiet && git diff --staged --quiet || git commit -m "Update IP record [skip ci]"
+            git push
+          fi
