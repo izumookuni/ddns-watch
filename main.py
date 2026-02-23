@@ -45,7 +45,7 @@ def get_current_ip(hostname: str) -> str:
         ip = socket.gethostbyname(hostname)
         return ip
     except socket.gaierror as e:
-        raise Exception(f"无法解析域名 {hostname}: {e}")
+        raise Exception(f"无法解析域名: {e}")
 
 
 def read_stored_ip(file_path: str, secret_key: str) -> str | None:
