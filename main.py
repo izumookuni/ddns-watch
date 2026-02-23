@@ -114,7 +114,7 @@ IP地址: {new_ip}
             server.starttls()
             server.login(smtp_user, smtp_password)
             server.sendmail(smtp_user, receive_mail, msg.as_string())
-        print(f"邮件通知已发送至 {receive_mail}")
+        print("邮件通知已发送")
     except Exception as e:
         raise Exception(f"发送邮件失败: {e}")
 
@@ -139,15 +139,13 @@ def main():
     # IP存储文件路径
     ip_file = 'current_ip'
 
-    print(f"开始监测域名: {hostname}")
+    print("开始监测域名")
 
     # 获取当前IP
     current_ip = get_current_ip(hostname)
-    print(f"当前IP: {current_ip}")
 
     # 读取存储的IP
     stored_ip = read_stored_ip(ip_file, secret_key)
-    print(f"存储的IP: {stored_ip or '无'}")
 
     # 比较IP
     if stored_ip != current_ip:
@@ -167,7 +165,7 @@ def main():
 
         # 更新存储的IP
         save_ip(ip_file, current_ip, secret_key)
-        print(f"IP已更新: {stored_ip or '无'} -> {current_ip}")
+        print("IP已更新")
     else:
         print("IP未变化，无需更新")
 
